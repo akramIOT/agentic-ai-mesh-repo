@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mcp-gateway.fullname" . }}
+  labels:
+    app: {{ include "mcp-gateway.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "mcp-gateway.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "mcp-gateway.name" . }}
+      annotations:
+        mesh.istio.io/include: "true"
+    spec:
+      containers:
+      - name: mcp-gateway
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MCP_BACKEND
+          value: "mcp-tool-server.default.svc.cluster.local:9090"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10

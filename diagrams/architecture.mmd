@@ -1,0 +1,14 @@
+flowchart LR
+  subgraph K8s[Cluster]
+    AO[Agent Orchestrator]
+    GW[MCP Gateway]
+    TS[MCP Tool Servers]
+    SPIRE[SPIRE]
+    ISTIO[Istio Ambient]
+  end
+  AO -->|MCP| GW
+  GW -->|mTLS| TS
+  ISTIO --- AO
+  ISTIO --- GW
+  ISTIO --- TS
+  SPIRE --> ISTIO

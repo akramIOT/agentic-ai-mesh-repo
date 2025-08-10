@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-mcp-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-mcp-gateway
+  template:
+    metadata:
+      labels:
+        app: demo-mcp-gateway
+      annotations:
+        mesh.istio.io/include: "true"
+    spec:
+      containers:
+      - name: demo-mcp-gateway
+        image: ghcr.io/example/mcp-gateway:demo
+        ports:
+        - containerPort: 8080

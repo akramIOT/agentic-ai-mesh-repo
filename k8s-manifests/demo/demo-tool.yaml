@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-mcp-tool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-mcp-tool
+  template:
+    metadata:
+      labels:
+        app: demo-mcp-tool
+      annotations:
+        mesh.istio.io/include: "true"
+    spec:
+      containers:
+      - name: demo-mcp-tool
+        image: ghcr.io/example/demo-mcp-tool:latest
+        ports:
+        - containerPort: 9090
